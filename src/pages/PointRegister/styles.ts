@@ -18,6 +18,11 @@ export const HeaderContent = styled.div`
     margin-top: 65px;
 
     margin-bottom: 25px;
+
+    @media (max-width: 600px) {
+        width: 100%;
+        padding-inline: 10px;
+    }
 `;
 
 export const LeftHeader = styled.div`
@@ -51,11 +56,21 @@ export const TimerContent = styled.div`
     .labelHour{
         font-size: ${(props) => props.theme.fontSizes['clock']};
     }
+
+    @media (max-width: 600px) {
+        width: 100%;
+        padding-inline: 10px;
+    }
 `;
 
 export const BoxButton = styled.div`
     width: 500px;
     margin-bottom: 20px;
+
+    @media (max-width: 600px) {
+        width: 100%;
+        padding-inline: 10px;
+    }
 `;
 
 export const ListPointsContent = styled.div`
@@ -64,5 +79,10 @@ export const ListPointsContent = styled.div`
         color: ${(props) => props.theme.colors['gray-100']};
         font-size: ${(props) => props.theme.fontSizes['text']};
         margin-bottom: 10px;
+    }
+
+    @media (max-width: 600px) {
+        width: 100%;
+        padding-inline: 10px;
     }
 `;
