@@ -69,6 +69,7 @@ export const PointRegister = () => {
 
                     //tem o ponto de inicio e o fim
                     if (pointToday[0].begin && pointToday[0].end) {
+                        console.log(pointToday[0].begin)
                         setEndTimer(pointToday[0].end)
                         setStartTimer(pointToday[0].begin)
                         setLabelPoint(pointToday[0].hours)
@@ -98,6 +99,7 @@ export const PointRegister = () => {
                 alert(res.error)
                 navigate('/')
             } else {
+                setStartTimer(currentDate)
                 alert(res.msg)
             }
         } catch (error) {
