@@ -93,12 +93,12 @@ export const PointRegister = () => {
             setLoading(true)
             const date = moment().format('L');
             const currentDate = moment().format();
+            setStartTimer(currentDate)
             const res = await api.startPoint(date, currentDate, user!.id);
             if (res.error) {
                 alert(res.error)
                 navigate('/')
             } else {
-                setStartTimer(currentDate)
                 alert(res.msg)
             }
         } catch (error) {
