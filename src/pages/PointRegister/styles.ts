@@ -9,6 +9,15 @@ export const Container = styled.div`
     align-items: center;
 `;
 
+export const SpinnerContent = styled.div`
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+    justify-content: center;
+    align-items: center;
+`;
+
 export const HeaderContent = styled.div`
     display: flex;
 

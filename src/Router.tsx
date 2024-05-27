@@ -15,7 +15,7 @@ export function Router() {
             />
             
             <Route
-                path="/pointRegister/:id"
+                path="/pointRegister/:code"
                 element={<PointRegister />}
             />
 
