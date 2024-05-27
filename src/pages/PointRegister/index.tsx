@@ -57,26 +57,33 @@ export const PointRegister = () => {
 
 
     const searchUser = async (code: string) => {
-        const res = await api.login(code);
-        if (res.error) {
-            alert(res.error)
-            navigate('/')
-        } else {
-            const date = moment().format('L');
-            const pointToday = res.points.filter((point: PointSystemInterface) => point.date === date);
+        try {
+            const res = await api.login(code);
+            if (res.error) {
+                alert(res.error)
+                navigate('/')
+            } else {
+                if (res.points.length > 0) {
+                    const date = moment().format('L');
+                    const pointToday = res.points.filter((point: PointSystemInterface) => point.date === date);
 
-            //tem o ponto de inicio e o fim
-            if (pointToday[0].begin && pointToday[0].end) {
-                setEndTimer(pointToday[0].end)
-                setStartTimer(pointToday[0].begin)
-                setLabelPoint(pointToday[0].hours)
+                    //tem o ponto de inicio e o fim
+                    if (pointToday[0].begin && pointToday[0].end) {
+                        setEndTimer(pointToday[0].end)
+                        setStartTimer(pointToday[0].begin)
+                        setLabelPoint(pointToday[0].hours)
+                    }
+                    //só tem o ponto de inicio
+                    else if (pointToday[0].begin) {
+                        setStartTimer(pointToday[0].begin)
+                    }
+                }
+                setUser(res.user)
+                setPointSystem(res.points)
             }
-            //só tem o ponto de inicio
-            else if (pointToday[0].begin) {
-                setStartTimer(pointToday[0].begin)
-            }
-            setUser(res.user)
-            setPointSystem(res.points)
+        } catch (error) {
+            alert('Ocorreu uma falha na aplicação, tente novamente.')
+            navigate('/')
         }
     }
 
@@ -104,7 +111,7 @@ export const PointRegister = () => {
     const endPoint = async () => {
         try {
             setLoading(true)
-            const res = await api.endPoint(moment(startTimer).format('L'),  moment().format(), user!.id, labelPoint);
+            const res = await api.endPoint(moment(startTimer).format('L'), moment().format(), user!.id, labelPoint);
             if (res.error) {
                 alert(res.error)
                 navigate('/')
@@ -166,12 +173,15 @@ export const PointRegister = () => {
 
                     <ListPointsContent>
                         <h1>Dias anteriores</h1>
-                        {!pointSystem || pointSystem.length < 1 || (pointSystem.length === 1 && !pointSystem[0].end) &&
+
+                        {(!pointSystem || pointSystem.length === 0 || (pointSystem.length === 1 && !pointSystem[0].end)) &&
+
                             <ItemList
                                 date="Nenhum dia trabalhado"
                                 hours="--h --m"
                             />
                         }
+
                         {pointSystem && pointSystem.length > 0 &&
                             pointSystem.map((item: PointSystemInterface) => {
                                 if (item.hours) {
