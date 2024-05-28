@@ -2,6 +2,8 @@ import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import moment from 'moment'
 import 'moment/dist/locale/pt-br'
+import Swal from 'sweetalert2';
+
 
 import { BoxButton, Container, HeaderContent, LeftHeader, ListPointsContent, RightHeader, SpinnerContent, TimerContent } from "./styles"
 import { Button } from "../../components/Button/intex"
@@ -33,7 +35,13 @@ export const PointRegister = () => {
         if (code) {
             searchUser(code)
         } else {
-            alert('Não foi possível localizar o usuário')
+            Swal.fire({
+                position: "center",
+                icon: "error",
+                title: "Não foi possível localizar o usuário.",
+                showConfirmButton: false,
+                timer: 1800
+            });
             navigate('/')
         }
     }, [])
@@ -60,7 +68,13 @@ export const PointRegister = () => {
         try {
             const res = await api.login(code);
             if (res.error) {
-                alert(res.error)
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: res.error,
+                    showConfirmButton: false,
+                    timer: 1800
+                });
                 navigate('/')
             } else {
                 if (res.points.length > 0) {
@@ -68,21 +82,29 @@ export const PointRegister = () => {
                     const pointToday = res.points.filter((point: PointSystemInterface) => point.date === date);
 
                     //tem o ponto de inicio e o fim
-                    if (pointToday[0].begin && pointToday[0].end) {
+                    if (pointToday.length > 0 && pointToday[0].begin && pointToday[0].end) {
                         setEndTimer(pointToday[0].end)
                         setStartTimer(pointToday[0].begin)
                         setLabelPoint(pointToday[0].hours)
                     }
                     //só tem o ponto de inicio
-                    else if (pointToday[0].begin) {
+                    else if (pointToday.length > 0 && pointToday[0].begin) {
                         setStartTimer(pointToday[0].begin)
                     }
+                    // else === ele não tem nenhum ponto registrado
                 }
                 setUser(res.user)
                 setPointSystem(res.points)
             }
         } catch (error) {
-            alert('Ocorreu uma falha na aplicação, tente novamente.')
+            console.log('error:', error)
+            Swal.fire({
+                position: "center",
+                icon: "error",
+                title: "Ocorreu uma falha na aplicação, tente novamente.",
+                showConfirmButton: false,
+                timer: 1800
+            });
             navigate('/')
         }
     }
@@ -96,13 +118,31 @@ export const PointRegister = () => {
             setStartTimer(currentDate)
             const res = await api.startPoint(date, currentDate, user!.id);
             if (res.error) {
-                alert(res.error)
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: res.error,
+                    showConfirmButton: false,
+                    timer: 1800
+                });
                 navigate('/')
             } else {
-                alert(res.msg)
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: res.msg,
+                    showConfirmButton: false,
+                    timer: 1800
+                });
             }
         } catch (error) {
-            alert('Ocorreu uma falha na aplicação, tente novamente.')
+            Swal.fire({
+                position: "center",
+                icon: "error",
+                title: 'Ocorreu uma falha na aplicação, tente novamente',
+                showConfirmButton: false,
+                timer: 1800
+            });
             navigate('/')
         } finally {
             setLoading(false)
@@ -114,14 +154,32 @@ export const PointRegister = () => {
             setLoading(true)
             const res = await api.endPoint(moment(startTimer).format('L'), moment().format(), user!.id, labelPoint);
             if (res.error) {
-                alert(res.error)
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: res.error,
+                    showConfirmButton: false,
+                    timer: 1800
+                });
                 navigate('/')
             } else {
-                alert(res.msg)
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: res.msg,
+                    showConfirmButton: false,
+                    timer: 1800
+                });
                 searchUser(code!)
             }
         } catch (error) {
-            alert('Erro ao se comunicar ao banco de dados, tente novamente.')
+            Swal.fire({
+                position: "center",
+                icon: "error",
+                title: 'Erro ao se comunicar ao banco de dados, tente novamente.',
+                showConfirmButton: false,
+                timer: 1800
+            });
             navigate('/')
         } finally {
             setLoading(false)

@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 import { Input } from '../../components/Input/intex';
 import { Container, Content, TopContent } from './styles';
 import { Button } from '../../components/Button/intex';
+
+
 
 
 export const Home = () => {
@@ -12,14 +15,20 @@ export const Home = () => {
     const [codUser, setCodUser] = useState('4SXXFMf')
 
     const handleNavigation = () => {
-        if(codUser){
+        if (codUser) {
             navigate(`/pointRegister/${codUser}`)
-        }else{
-            alert('Preencha o código solicitado.')
+        } else {
+            Swal.fire({
+                position: "center",
+                icon: "warning",
+                title: "Preencha o código solicitado.",
+                showConfirmButton: false,
+                timer: 1800
+            });
         }
     }
 
-    return(
+    return (
         <Container>
             <Content>
                 <TopContent>
@@ -27,7 +36,7 @@ export const Home = () => {
                     <h1 className='negrito'>Ilumeo</h1>
                 </TopContent>
 
-                <Input 
+                <Input
                     title='Código do usuário'
                     value={codUser}
                     onChange={e => setCodUser(e.target.value)}
