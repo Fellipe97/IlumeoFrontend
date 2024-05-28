@@ -26,6 +26,3 @@ export function Router() {
         </Routes>
     )
 }
-
-
-///    24=(:S}3K9x?
